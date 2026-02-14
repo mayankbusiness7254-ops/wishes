@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Story</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+height:100vh;
+overflow:hidden;
+background:linear-gradient(135deg,#ffd1e8,#ff5c8a);
+color:white;
+text-align:center;
+}
+
+/* Intro */
+.intro{
+position:fixed;inset:0;
+display:flex;justify-content:center;align-items:center;
+background:linear-gradient(135deg,#ff8fb1,#ff3e6c);
+z-index:100;
+}
+.intro h1{
+font-family:'Dancing Script';
+font-size:3rem;
+}
+
+/* Password */
+.password-screen{
+position:fixed;inset:0;
+display:none;justify-content:center;align-items:center;
+flex-direction:column;
+background:linear-gradient(135deg,#ffc1e3,#ff4f81);
+z-index:90;
+}
+.password-screen input{
+padding:10px;border:none;border-radius:5px;margin:10px;
+}
+
+/* Countdown */
+.countdown{
+position:fixed;inset:0;
+display:none;justify-content:center;align-items:center;
+font-size:4rem;
+background:rgba(255,255,255,0.25);
+z-index:80;
+}
+
+/* Main */
+.main{
+display:none;height:100vh;
+overflow-y:auto;padding:40px 20px;
+}
+
+/* Timeline */
+.timeline{margin-top:30px;}
+.moment{
+background:rgba(255,255,255,0.2);
+padding:15px;margin:15px 0;
+border-radius:12px;
+}
+.moment img{
+width:100%;max-width:300px;
+border-radius:12px;margin-top:10px;
+}
+
+/* Buttons */
+.buttons{
+margin-top:30px;
+display:flex;
+justify-content:center;
+gap:40px;
+}
+
+#yesBtn{
+padding:12px 40px;
+border:none;
+border-radius:50px;
+background:#ff1744;
+color:white;
+font-size:1.2rem;
+transition:0.3s;
+}
+
+#noBtn{
+padding:8px 20px;
+border-radius:50px;
+background:white;
+color:#ff1744;
+border:2px solid #ff1744;
+position:relative;
+transition:0.3s;
+}
+
+/* Final */
+.final{
+position:fixed;inset:0;
+display:flex;flex-direction:column;
+justify-content:center;align-items:center;
+background:linear-gradient(135deg,#ff7aa2,#ff1744);
+z-index:200;
+}
+
+.collage{
+display:flex;flex-wrap:wrap;
+justify-content:center;
+gap:15px;
+margin-bottom:20px;
+}
+
+.collage img{
+width:140px;height:140px;
+object-fit:cover;
+border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.glow{
+font-family:'Dancing Script';
+font-size:2.5rem;
+}
+</style>
+</head>
+<body>
+
+<audio id="bgMusic" loop>
+<source src="music.mpeg" type="audio/mpeg">
+</audio>
+
+<div class="intro">
+<h1>Avika beta 💖</h1>
+</div>
+
+<div class="password-screen">
+<h2>Enter Our Secret Password 💌</h2>
+<input type="password" id="passwordInput">
+<button onclick="checkPassword()">Unlock</button>
+</div>
+
+<div class="countdown" id="countdown">3</div>
+
+<div class="main" id="mainContent">
+
+<h1 style="font-family:'Dancing Script';font-size:2.5rem;">
+Will You Be My Valentine, Avika?
+</h1>
+
+<p><i>I've been gathering courage to ask you this...</i></p>
+
+<div class="timeline">
+<div class="moment">
+The day we first talked ❤️
+<img src="moment1.jpg">
+</div>
+
+<div class="moment">
+That help/efforts u made were unforgetable. ✨
+<img src="moment2.jpg">
+</div>
+
+<div class="moment">
+When I realized you are different 💫.a magnanimous one dear
+</div>
+</div>
+
+<div class="buttons">
+<button id="yesBtn">Yes ❤️</button>
+<button id="noBtn">No</button>
+</div>
+
+</div>
+
+<script>
+
+const CORRECT_PASSWORD="22dec";
+
+/* Intro flow */
+setTimeout(()=>{
+document.querySelector(".intro").style.display="none";
+document.querySelector(".password-screen").style.display="flex";
+},2000);
+
+function checkPassword(){
+if(document.getElementById("passwordInput").value===CORRECT_PASSWORD){
+document.querySelector(".password-screen").style.display="none";
+startCountdown();
+}else{
+alert("Wrong password 😏");
+}
+}
+
+/* Countdown */
+function startCountdown(){
+const cd=document.getElementById("countdown");
+cd.style.display="flex";
+let count=3;
+const interval=setInterval(()=>{
+cd.innerText=count;
+count--;
+if(count<0){
+clearInterval(interval);
+cd.style.display="none";
+document.getElementById("mainContent").style.display="block";
+document.getElementById("bgMusic").volume=0.3;
+document.getElementById("bgMusic").play();
+}
+},1000);
+}
+
+/* YES DELAY */
+let yesClicks=0;
+let unlocked=false;
+
+const yesTease=[
+"Itni jaldi bhi kya hai 😏",
+"Ek baar aur soch lo 💭",
+"Pakka? 🤭",
+"Okay… now press again ❤️"
+];
+
+const yesBtn=document.getElementById("yesBtn");
+
+yesBtn.onclick=function(e){
+if(unlocked){launchFinal();return;}
+e.preventDefault();
+if(yesClicks<yesTease.length){
+yesBtn.innerText=yesTease[yesClicks];
+yesClicks++;
+}else{
+unlocked=true;
+yesBtn.innerText="Yes ❤️";
+}
+};
+
+/* NO HOVER TELEPORT 3 TIMES */
+const noBtn=document.getElementById("noBtn");
+let hoverCount=0;
+let gentleman=false;
+
+const teasingMessages=[
+"Nice try 😏",
+"Not happening!",
+"You sure??"
+];
+
+noBtn.addEventListener("mouseover",function(){
+
+if(gentleman) return;
+
+if(hoverCount<3){
+let x=Math.random()*(window.innerWidth-120);
+let y=Math.random()*(window.innerHeight-60);
+noBtn.style.position="fixed";
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+noBtn.innerText=teasingMessages[hoverCount];
+hoverCount++;
+}else{
+gentleman=true;
+noBtn.style.position="";
+noBtn.style.left="";
+noBtn.style.top="";
+noBtn.innerText="Okay… no worries. I'm still a gentleman 🙂";
+}
+});
+
+noBtn.addEventListener("click",function(){
+if(gentleman){
+launchFinal();
+}
+});
+
+/* Final */
+function launchFinal(){
+const final=document.createElement("div");
+final.className="final";
+final.innerHTML=`
+<div class="collage">
+<img src="final1.jpeg">
+<img src="final2.jpeg">
+<img src="final3.jpeg">
+<img src="final4.jpeg">
+</div>
+<div class="glow">Jyada mat soch… dost hi sahi, par meri favourite dost toh tum hi ho... 
+    itni busy to hmare college ki ldkiya nhi h ..  ❤️</div>
+`;
+document.body.appendChild(final);
+}
+
+</script>
+
+</body>
+</html>
